@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UploadCsv from "../components/UploadCsv";
 import Reports from "../components/Reports";
+import { calculateTotalAmount } from "../utils/functions/calculateTotalAmount";
 
 export default function Home() {
   const [parsedJson, setParsedJson] = useState(null);
@@ -8,7 +9,7 @@ export default function Home() {
   return (
     <>
       <UploadCsv setParsedJson={setParsedJson} />
-      <Reports data={parsedJson} />
+      {parsedJson && <Reports data={calculateTotalAmount(parsedJson)} />}
     </>
   );
 }
