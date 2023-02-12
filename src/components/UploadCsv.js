@@ -3,12 +3,27 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import NriAlert from "./NriAlert";
+import { isCsvFileValid } from "../utils/functions/isCsvFileValid";
 import { parseCsv } from "../utils/functions/parseCsv";
 
 export default function UploadCsv({ setParsedJson }) {
   const [csvFile, setCsvFile] = useState(null);
+  const [csvFileError, setCsvFileError] = useState(null);
 
   const handleSubmit = () => {
+    setCsvFileError(null);
+
+    if (!csvFile) {
+      setCsvFileError("Please select a csv file");
+      return;
+    }
+
+    if (!isCsvFileValid(csvFile)) {
+      setCsvFileError("Please select a valid csv file");
+      return;
+    }
+
     parseCsv(csvFile, setParsedJson);
   };
 
@@ -18,6 +33,7 @@ export default function UploadCsv({ setParsedJson }) {
         Welcome to NRI Inventory
       </Card.Header>
       <Card.Body>
+        {csvFileError && <NriAlert text={csvFileError} />}
         <Card.Text>
           Please upload a <code>.csv</code> file received from an auctioneer
         </Card.Text>
